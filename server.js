@@ -6,9 +6,11 @@ const Quote = require('./models/quote');
 const app = express();
 app.use(express.json());
 
+// Mengalihkan halaman utama (/) langsung ke halaman (/quotes)
 app.get('/', (req, res) => {
-  res.redirect('/quotes')
-})
+  res.redirect('/quotes');
+});
+
 
 app.get('/api/quotes', async (req, res) => {
   try {

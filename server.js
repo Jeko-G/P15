@@ -18,6 +18,7 @@ app.get('/api/quotes', async (req, res) => {
   }
 });
 
+// Endpoint B: /quotes -> Menampilkan halaman web persis sesuai gambar
 app.get('/quotes', async (req, res) => {
   try {
     const randomQuotes = await Quote.findAll({
@@ -33,36 +34,127 @@ app.get('/quotes', async (req, res) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Daily Inspiration</title>
         <style>
-          body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; margin: 0; padding: 40px; color: #333; }
-          h1 { text-align: center; color: #4a4a4a; margin-bottom: 30px; }
-          .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
-          .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-left: 5px solid #007bff; display: flex; flex-direction: column; justify-content: space-between; }
-          .text { font-style: italic; font-size: 1.1rem; line-height: 1.5; margin-bottom: 15px; }
-          .author { text-align: right; font-weight: bold; color: #666; }
-          .btn-container { text-align: center; margin-top: 40px; }
-          .btn { background: #007bff; color: white; border: none; padding: 12px 24px; font-size: 1rem; border-radius: 25px; cursor: pointer; text-decoration: none; transition: background 0.2s; }
-          .btn:hover { background: #0056b3; }
+          * { box-sizing: border-box; }
+          body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: #f3f4f6; 
+            margin: 0; 
+            padding: 0; 
+            color: #333; 
+          }
+          /* Header Ungu Melengkung sesuai gambar */
+          .header {
+            background: #6f42c1;
+            color: white;
+            text-align: center;
+            padding: 60px 20px 80px 20px;
+            border-bottom-left-radius: 50% 20px;
+            border-bottom-right-radius: 50% 20px;
+          }
+          .header h1 {
+            margin: 0 0 10px 0;
+            font-size: 2.5rem;
+            font-weight: bold;
+          }
+          .header p {
+            margin: 0;
+            font-size: 1.1rem;
+            opacity: 0.9;
+          }
+          /* Container Grid */
+          .main-container {
+            max-width: 1200px;
+            margin: -40px auto 40px auto;
+            padding: 0 20px;
+          }
+          .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+            gap: 25px; 
+          }
+          /* Card Gaya Baru */
+          .card { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 16px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between;
+            position: relative;
+            min-height: 200px;
+          }
+          /* Ikon Kutipan Ganda Ungu */
+          .card::before {
+            content: "“";
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 4rem;
+            color: #e2d9f3;
+            font-family: Georgia, serif;
+            line-height: 1;
+          }
+          .text { 
+            font-style: italic; 
+            font-size: 1.15rem; 
+            line-height: 1.6; 
+            margin-top: 20px;
+            margin-bottom: 20px;
+            color: #4a4a4a;
+            z-index: 1;
+          }
+          .author { 
+            text-align: right; 
+            font-weight: bold; 
+            color: #6f42c1; /* Warna nama author ungu menyesuaikan tema */
+            font-size: 1rem;
+          }
+          /* Tombol Acak di bagian bawah */
+          .btn-container { text-align: center; margin-top: 50px; margin-bottom: 50px; }
+          .btn { 
+            background: #6f42c1; 
+            color: white; 
+            border: none; 
+            padding: 14px 32px; 
+            font-size: 1rem; 
+            font-weight: bold;
+            border-radius: 30px; 
+            cursor: pointer; 
+            text-decoration: none; 
+            box-shadow: 0 5px 15px rgba(111, 66, 193, 0.3);
+            transition: all 0.2s; 
+          }
+          .btn:hover { background: #5a32a3; transform: translateY(-2px); }
         </style>
       </head>
       <body>
-        <h1>✨ Daily Inspiration ✨</h1>
-        <div class="grid">
+
+        <div class="header">
+          <h1>Daily Inspiration For You</h1>
+          <p>Koleksi kata-kata mutiara</p>
+        </div>
+
+        <div class="main-container">
+          <div class="grid">
     `;
 
     randomQuotes.forEach(quote => {
       htmlContent += `
         <div class="card">
-          <div class="text">"${quote.text}"</div>
+          <div class="text">${quote.text}</div>
           <div class="author">— ${quote.author}</div>
         </div>
       `;
     });
 
     htmlContent += `
+          </div>
+          <div class="btn-container">
+            <a href="/quotes" class="btn">Acak Kutipan Baru</a>
+          </div>
         </div>
-        <div class="btn-container">
-          <a href="/quotes" class="btn">Acak Kutipan Baru</a>
-        </div>
+
       </body>
       </html>
     `;
@@ -72,6 +164,7 @@ app.get('/quotes', async (req, res) => {
     res.status(500).send('<h1>Terjadi kesalahan server saat memuat halaman.</h1>');
   }
 });
+
 
 const PORT = process.env.PORT || 3000;
 sequelize.authenticate()

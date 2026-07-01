@@ -6,6 +6,10 @@ const Quote = require('./models/quote');
 const app = express();
 app.use(express.json());
 
+app.get('/', (req, res) => {
+  res.redirect('/quotes')
+})
+
 app.get('/api/quotes', async (req, res) => {
   try {
     const randomQuotes = await Quote.findAll({
